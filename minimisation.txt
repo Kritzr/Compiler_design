@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_STATES 25
+#define MAX_INPUT 10
+
+typedef struct {
+    int transitions[MAX_INPUT][MAX_STATES];
+    int numStates;
+    int numInputs;
+    int finalStates[MAX_STATES];
+    int numFinals;
+} DFA;
+
+void minimizeDFA(DFA *dfa);
+
+int main() {
+    DFA dfa;
+    char input[25];
+
+    printf("Krithika - DFA\n");
+    printf("Enter the number of states in the DFA: ");
+    scanf("%d", &dfa.numStates);
+
+    printf("Enter the number of distinct inputs: ");
+    scanf("%d", &dfa.numInputs);
+
+    // Initialize transition table
+    for (int i = 0; i < dfa.numStates; i++) {
+        for (int j = 0; j < dfa.numInputs; j++) {
+            printf("Enter the state transitioned to from q%d on input %d: ", i, j);
+            scanf("%d", &dfa.transitions[i][j]);
+        }
+    }
+
+    printf("\nEnter the number of final states: ");
+    scanf("%d", &dfa.numFinals);
+    
+    printf("Enter final states: ");
+    for (int i = 0; i < dfa.numFinals; i++) {
+        scanf("%d", &dfa.finalStates[i]);
+    }
+
+    // Display transition table
+    printf("\nTRANSITION TABLE\n");
+    printf("State\t| ");
+    for (int j = 0; j < dfa.numInputs; j++) {
+        printf("Input %d\t| ", j);
+    }
+    printf("\n");
+    
+    for (int i = 0; i < dfa.numStates; i++) {
+        printf("q%d\t| ", i);
+        for (int j = 0; j < dfa.numInputs; j++) {
+            printf("q%d\t| ", dfa.transitions[i][j]);
+        }
+        printf("\n");
+    }
+
+    do {
+        printf("\nGive the input buffer (space-separated values): ");
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = 0; // Remove newline character
+
+        char *token = strtok(input, " ");
+        int currentState = 0; // Starting state (q0)
+        int accepted = 0;
+
+        while (token != NULL) {
+            int ip = atoi(token);
+            if (ip < 0 || ip >= dfa.numInputs) {
+                printf("Invalid input: %d\n", ip);
+                break;
+            }
+            currentState = dfa.transitions[currentState][ip];
+            token = strtok(NULL, " ");
+        }
+
+        // Check if the final state is accepted
+        for (int i = 0; i < dfa.numFinals; i++) {
+            if (currentState == dfa.finalStates[i]) {
+                accepted = 1;
+                break;
+            }
+        }
+
+        if (accepted) {
+            printf("The input buffer is accepted\n");
+        } else {
+            printf("The input buffer is not accepted\n");
+        }
+
+        printf("Enter 0 to exit and 1 to continue: ");
+        scanf("%d", &dfa.numStates);
+        getchar(); // Consume newline character
+    } while (dfa.numStates == 1);
+
+    // Minimize the DFA
+    minimizeDFA(&dfa);
+
+    return 0;
+}
+
+// Placeholder for DFA minimization function
+void minimizeDFA(DFA *dfa) {
+    printf("Minimizing DFA...\n");
+    // Here you would implement the minimization algorithm,
+    // such as Hopcroft's algorithm or another method.
+}
