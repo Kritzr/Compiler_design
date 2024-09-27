@@ -5,7 +5,7 @@
 int main(){
         int numberofstates, count = 0;
         char input [25];
-        printf("Krithika - dfa\n");
+        printf("Krithika Ravishankar - dfa\n");
         printf("Enter the number of states in the dfa:\t");
         scanf("%d", &numberofstates);
         int transition[numberofstates][2] ; //as the only possible inputs are two - zero and one
@@ -31,7 +31,7 @@ int main(){
                 scanf("%d", &finalstate[i]);
         }
         printf("\nTRANSITION TABLE\n");
-        printf("\nip\t|0\t|1\t|");
+        printf("\ninput\t|0\t|1\t|");
         int j;
         for(i=0; i<numberofstates;i++){
                 printf("\n q%d\t|", i);
